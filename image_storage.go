@@ -23,7 +23,7 @@ type DirImgStorage struct {
 //SaveWithFileHeader 拡張子を指定せず、渡したファイルの拡張子を使用して保存する
 func (im *DirImgStorage) SaveWithFileHeader(file multipart.File, fileHeader *multipart.FileHeader, newFileName string, directory string) error {
 
-	e := im.SaveWithOriginFileName(file, filepath.Ext(fileHeader.Filename), newFileName, directory)
+	e := im.SaveWithOriginFileName(file, fileHeader.Filename, newFileName, directory)
 	if e != nil {
 		printError("AddWithAutoExtension()", e)
 		return e
@@ -36,9 +36,9 @@ func (im *DirImgStorage) SaveWithFileHeader(file multipart.File, fileHeader *mul
 // example:
 // originFileName = hoge.png
 // newFileName = fuga
-func (im *DirImgStorage) SaveWithOriginFileName(file multipart.File, originFileExtension string, newFileName string, directory string) error {
+func (im *DirImgStorage) SaveWithOriginFileName(file multipart.File, originFileName string, newFileName string, directory string) error {
 	defer file.Close()
-	storageFilePath := filepath.Join(directory, newFileName+originFileExtension)
+	storageFilePath := filepath.Join(directory, newFileName+filepath.Ext(originFileName))
 
 	data, e := ioutil.ReadAll(file)
 	if e != nil {
