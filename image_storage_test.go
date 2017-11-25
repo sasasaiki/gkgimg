@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"mime/multipart"
 	"os"
-	"reflect"
+	"path"
+	"path/filepath"
 	"testing"
 )
 
 const (
-	TestDir  = "testImages/"
-	JpegFile = "test.jpg"
-	JpegPath = TestDir + JpegFile
-	PngFile  = "test.jpg"
-	PngPath  = TestDir + PngFile
-	TextFile = "test.text"
-	TextPath = TestDir + TextFile
+	TestDir       = "testImages/"
+	JpegFile      = "test.jpg"
+	JpegPath      = TestDir + JpegFile
+	PngFile       = "test.png"
+	PngPath       = TestDir + PngFile
+	TextFile      = "test.text"
+	TextPath      = TestDir + TextFile
+	TestResultDir = "testImageStorage"
 )
 
 func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
@@ -42,7 +44,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       openFile(PngPath),
 				fileHeader: pngFileHeader,
 				fileName:   "test",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -52,7 +54,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       openFile(JpegPath),
 				fileHeader: jpegFileHeader,
 				fileName:   "test",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -62,7 +64,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       openFile(TextPath),
 				fileHeader: textFileHeader,
 				fileName:   "test",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -72,7 +74,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       openFile(JpegPath),
 				fileHeader: pngFileHeader,
 				fileName:   "test_jpg_to",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -82,7 +84,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       openFile(PngPath),
 				fileHeader: jpegFileHeader,
 				fileName:   "test_png_to",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -92,7 +94,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       openFile(TextPath),
 				fileHeader: jpegFileHeader,
 				fileName:   "test_text_to",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -102,7 +104,7 @@ func TestDirImgStorageSaveWithFileHeader(t *testing.T) {
 				file:       closedFile(JpegPath),
 				fileHeader: jpegFileHeader,
 				fileName:   "test_text_to",
-				directory:  "testImageStorage",
+				directory:  TestResultDir,
 			},
 			wantErr: true,
 		},
@@ -176,9 +178,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "pngをpngとして保存できる",
 			args: args{
 				file:           openFile(PngPath),
-				originFilename: PngFile,
+				originFilename: path.Ext(PngFile),
 				fileName:       "test",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -186,9 +188,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "jpegをjpegとして保存できる",
 			args: args{
 				file:           openFile(JpegPath),
-				originFilename: JpegFile,
+				originFilename: path.Ext(JpegFile),
 				fileName:       "test",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -196,9 +198,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "textも保存できるらしい",
 			args: args{
 				file:           openFile(TextPath),
-				originFilename: TextPath,
+				originFilename: path.Ext(TextPath),
 				fileName:       "test",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -206,9 +208,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "jpegをpngとして保存してみる.エラーは出ない",
 			args: args{
 				file:           openFile(JpegPath),
-				originFilename: PngFile,
+				originFilename: filepath.Ext(PngFile),
 				fileName:       "test_jpg_to",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -216,9 +218,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "pngをjpegとして保存してみる.エラーは出ない",
 			args: args{
 				file:           openFile(PngPath),
-				originFilename: JpegFile,
+				originFilename: filepath.Ext(JpegFile),
 				fileName:       "test_png_to",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -226,9 +228,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "textをjpegとして保存してみる.エラーは出ないがひらけないファイルができる",
 			args: args{
 				file:           openFile(TextPath),
-				originFilename: JpegFile,
+				originFilename: filepath.Ext(JpegFile),
 				fileName:       "test_text_to",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -236,9 +238,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "jpegをtextとして保存してみる.エラーは出ないがひらけないファイルができる",
 			args: args{
 				file:           openFile(JpegPath),
-				originFilename: TextFile,
+				originFilename: filepath.Ext(TextFile),
 				fileName:       "test_jpeg_to",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: false,
 		},
@@ -246,9 +248,9 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			name: "閉じられたfileはエラーを返す",
 			args: args{
 				file:           closedFile(JpegPath),
-				originFilename: JpegFile,
+				originFilename: filepath.Ext(JpegFile),
 				fileName:       "test_text_to",
-				directory:      "testImageStorage",
+				directory:      TestResultDir,
 			},
 			wantErr: true,
 		},
