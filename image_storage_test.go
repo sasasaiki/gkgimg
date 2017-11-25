@@ -188,7 +188,7 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 			args: args{
 				file:           openFile(JpegPath),
 				originFilename: JpegFile,
-				fileName:       "test",
+				fileName:       "testj",
 				directory:      TestResultDir,
 			},
 			wantErr: false,
@@ -252,6 +252,16 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 				directory:      TestResultDir,
 			},
 			wantErr: true,
+		},
+		{
+			name: "fileNameが空欄ならoriginalNameを使う",
+			args: args{
+				file:           openFile(JpegPath),
+				originFilename: JpegFile,
+				fileName:       "",
+				directory:      TestResultDir,
+			},
+			wantErr: false,
 		},
 	}
 

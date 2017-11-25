@@ -40,7 +40,12 @@ func (im *DirImgStorage) SaveWithFileHeader(file multipart.File, fileHeader *mul
 // newFileName = fuga
 func (im *DirImgStorage) SaveWithOriginFileName(file multipart.File, originFileName string, newFileName string, directory string) error {
 	defer file.Close()
-	storageFilePath := filepath.Join(directory, newFileName+filepath.Ext(originFileName))
+	var storageFilePath string
+	if newFileName == "" {
+		storageFilePath = filepath.Join(directory, originFileName)
+	} else {
+		storageFilePath = filepath.Join(directory, newFileName+filepath.Ext(originFileName))
+	}
 
 	data, e := ioutil.ReadAll(file)
 	if e != nil {
