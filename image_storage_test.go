@@ -265,30 +265,55 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 	}
 }
 
-func TestSaveToJpeg(t *testing.T) {
+func TestSavePngToJpeg(t *testing.T) {
 	type args struct {
-		file    multipart.File
-		path    string
-		quality int
+		file            multipart.File
+		originExtension string
+		newFileName     string
+		dir             string
+		quality         int
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *os.File
 		wantErr bool
 	}{
-	// TODO: Add test cases.
+		{
+			name: "pngをjpegにして保存できる",
+			args: args{
+				file:            openFile(PngPath),
+				originExtension: filepath.Ext(PngPath),
+				newFileName:     "test_png_to_jpeg",
+				dir:             TestResultDir,
+				quality:         100,
+			},
+			wantErr: false,
+		},
+		{
+			name: "jpegを渡すとエラーが出る",
+			args: args{
+				file:            openFile(JpegPath),
+				originExtension: filepath.Ext(JpegFile),
+				newFileName:     "test_jpeg_to_jpeg",
+				dir:             TestResultDir,
+				quality:         100,
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := SaveToJpeg(tt.args.file, tt.args.path, tt.args.quality)
+			_, err := SavePngToJpeg(tt.args.file, tt.args.originExtension, tt.args.newFileName, tt.args.dir, tt.args.quality)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SaveToJpeg() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SaveToJpeg() = %v, want %v", got, tt.want)
-			}
+			// if !reflect.DeepEqual(got, tt.want) {
+			// 	t.Errorf("SaveToJpeg() = %v, want %v", got, tt.want)
+			// }
+		})
+	}
+}
 		})
 	}
 }

@@ -1,13 +1,15 @@
 package imageStorage
 
 import (
+	"errors"
 	"fmt"
 	"image"
+	"image/jpeg"
+	"image/png"
 	"io/ioutil"
 	"mime/multipart"
 	"os"
 	"path/filepath"
-
 )
 
 //ImgStorageI イメージ保管に必要なメソッドを持つ
@@ -55,7 +57,44 @@ func (im *DirImgStorage) SaveWithOriginFileName(file multipart.File, originFileN
 	return nil
 }
 
+// SavePngToJpeg jpegに変換して保存
+// TODO:透明部分が黒くなってしまうので一旦置いとく
+func SavePngToJpeg(file multipart.File, originFileExtension string, newFileName string, directory string, quality int) (*os.File, error) {
+	var img image.Image
+	var err error
+	switch originFileExtension {
+	case ".jpeg", ".jpg":
+		err = errors.New("jpg don't need to jpeg")
+		printError("jpgなので変換の必要がありません", err)
+		return nil, err
+	case ".png":
+		img, err = png.Decode(file)
+		if err != nil {
+			printError("pngのデコードに失敗しました", err)
+			return nil, err
+		}
+	default:
+		err = errors.New("Not compatible")
+		printError("png以外のファイルです", err)
+		return nil, err
+	}
 
+	storageFilePath := filepath.Join(directory, newFileName+".jpg")
+	out, err := os.Create(storageFilePath)
+	if err != nil {
+		printError("imageのCreateに失敗しました", err)
+		return nil, err
+	}
+	defer out.Close()
+
+	opts := &jpeg.Options{Quality: quality}
+	err = jpeg.Encode(out, img, opts)
+	if err != nil {
+		printError("jpegへのEncodeに失敗しました", err)
+		return nil, err
+	}
+
+	return out, nil
 }
 
 func (im *DirImgStorage) Update() {
