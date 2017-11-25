@@ -141,7 +141,7 @@ func existFile(path string) bool {
 	return true
 }
 
-func Test_printError(t *testing.T) {
+func TestPrintError(t *testing.T) {
 	type args struct {
 		message string
 		e       error
