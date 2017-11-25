@@ -1,0 +1,6 @@
+hash: 5eaab1ccb3f680cdc56494b872b9ea75d0642411fff91bf6a1c497d071fccaea
+updated: 2017-11-25T11:18:22.324293199+09:00
+imports:
+- name: github.com/pixiv/go-libjpeg
+  version: 5d35bb3437bd4f0adaa2289d9f57c969a3975f98
+testImports: []
