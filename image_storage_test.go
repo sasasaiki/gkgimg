@@ -263,3 +263,31 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 		})
 	}
 }
+
+func TestSaveToJpeg(t *testing.T) {
+	type args struct {
+		file    multipart.File
+		path    string
+		quality int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *os.File
+		wantErr bool
+	}{
+	// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := SaveToJpeg(tt.args.file, tt.args.path, tt.args.quality)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SaveToJpeg() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SaveToJpeg() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
