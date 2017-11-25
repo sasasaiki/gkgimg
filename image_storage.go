@@ -1,23 +1,74 @@
 package imageStorage
 
-type imageManagerI interface {
+import (
+	"fmt"
+	"image"
+	"io/ioutil"
+	"mime/multipart"
+	"os"
+	"path/filepath"
+
+)
+
+//ImgStorageI イメージ保管に必要なメソッドを持つ
+type ImgStorageI interface {
+	SaveWithFileHeader(multipart.File, *multipart.FileHeader, string, string) error
+	SaveWithOriginFileName(multipart.File, string, string, string) error
 }
 
-type imageManager struct {
+//DirImgStorage ディレクトリに保存する
+type DirImgStorage struct {
 }
 
-func (im *imageManager) Add() {
+//SaveWithFileHeader 拡張子を指定せず、渡したファイルの拡張子を使用して保存する
+func (im *DirImgStorage) SaveWithFileHeader(file multipart.File, fileHeader *multipart.FileHeader, newFileName string, directory string) error {
+
+	e := im.SaveWithOriginFileName(file, fileHeader.Filename, newFileName, directory)
+	if e != nil {
+		printError("AddWithAutoExtension()", e)
+		return e
+	}
+
+	return nil
+}
+
+//SaveWithOriginFileName 新しく保存するファイル名には拡張子を指定せず、渡したファイルの拡張子を使用して保存する
+// example:
+// originFileName = hoge.png
+// newFileName = fuga
+func (im *DirImgStorage) SaveWithOriginFileName(file multipart.File, originFileName string, newFileName string, directory string) error {
+	defer file.Close()
+	storageFilePath := filepath.Join(directory, newFileName+filepath.Ext(originFileName))
+
+	data, e := ioutil.ReadAll(file)
+	if e != nil {
+		printError("Add()でReadALL(file)に失敗", e)
+		return e
+	}
+
+	e = ioutil.WriteFile(storageFilePath, data, 0600)
+	if e != nil {
+		printError("Add()でfileの保存に失敗", e)
+		return e
+	}
+
+	return nil
+}
+
 
 }
 
-func (im *imageManager) Update() {
+func (im *DirImgStorage) Update() {
+}
+
+func (im *DirImgStorage) Delete() {
 
 }
 
-func (im *imageManager) Delete() {
+func (im *DirImgStorage) Get() {
 
 }
 
-func (im *imageManager) Get() {
-
+func printError(message string, e error) {
+	fmt.Println("in image-storage ", message, " error occurred", e)
 }
