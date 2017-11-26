@@ -324,6 +324,3 @@ func TestSavePngToJpeg(t *testing.T) {
 		})
 	}
 }
-		})
-	}
-}
