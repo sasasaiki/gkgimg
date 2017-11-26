@@ -82,7 +82,7 @@ func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, n
 		storageFilePath = filepath.Join(directory, newFileName+"."+format)
 	}
 
-	resizeFile := resize.Resize(w, h, i, resize.Lanczos3)
+	resizeFile := resize.Resize(w, h, i, resize.Bicubic)
 	bf := new(bytes.Buffer)
 
 	switch format {
