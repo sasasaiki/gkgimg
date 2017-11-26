@@ -31,7 +31,7 @@ type DirImgStorage struct {
 // example:
 // originFileName = "hoge.png"
 // newFileName = "fuga"
-func (im *DirImgStorage) SaveAsItIs(file multipart.File, originFileName string, newFileName string, directory string) error {
+func (im *DirImgStorage) SaveAsItIs(file multipart.File, originFileName, newFileName, directory string) error {
 	defer file.Close()
 	var storageFilePath string
 	if newFileName == "" {
@@ -109,7 +109,7 @@ func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, n
 
 // SavePngToJpeg jpegに変換して保存
 // TODO:透明部分が黒くなってしまうので一旦置いとく
-func (im *DirImgStorage) SavePngToJpeg(file multipart.File, originFileExtension string, newFileName string, directory string, quality int) (*os.File, error) {
+func (im *DirImgStorage) SavePngToJpeg(file multipart.File, originFileExtension, newFileName, directory string, quality int) (*os.File, error) {
 	var img image.Image
 	var err error
 	switch originFileExtension {
