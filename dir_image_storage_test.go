@@ -224,3 +224,31 @@ func TestSavePngToJpeg(t *testing.T) {
 		})
 	}
 }
+
+func TestDirImgStorageSaveResizedImage(t *testing.T) {
+	type args struct {
+		file           multipart.File
+		originFileName string
+		newFileName    string
+		directory      string
+		w              uint
+		h              uint
+		jpgQ           int
+	}
+	tests := []struct {
+		name    string
+		im      *DirImgStorage
+		args    args
+		wantErr bool
+	}{
+	// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			im := &DirImgStorage{}
+			if err := im.SaveResizedImage(tt.args.file, tt.args.originFileName, tt.args.newFileName, tt.args.directory, tt.args.w, tt.args.h, tt.args.jpgQ); (err != nil) != tt.wantErr {
+				t.Errorf("DirImgStorage.SaveResizedImage() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
