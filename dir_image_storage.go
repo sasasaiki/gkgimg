@@ -26,6 +26,10 @@ type ImgStorageI interface {
 type DirImgStorage struct {
 }
 
+const (
+	filePermission = 0600
+)
+
 //SaveAsItIs 新しく保存するファイル名には拡張子を指定せず、渡したファイルの拡張子を使用して保存する
 //そのまま何もせず保存しているだけなので多分何でも保存できる
 // example:
@@ -46,7 +50,9 @@ func (im *DirImgStorage) SaveAsItIs(file multipart.File, originFileName, newFile
 		return e
 	}
 
-	e = ioutil.WriteFile(storageFilePath, data, 0600)
+	createDirectoryIfNeed(directory)
+
+	e = ioutil.WriteFile(storageFilePath, data, filePermission)
 	if e != nil {
 		printError("Add()でfileの保存に失敗", e)
 		return e
@@ -83,6 +89,8 @@ func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, n
 		storageFilePath = filepath.Join(directory, newFileName+"."+format)
 	}
 
+	createDirectoryIfNeed(directory)
+
 	resizeFile := resize.Resize(w, h, i, resize.Bicubic)
 	bf := new(bytes.Buffer)
 
@@ -103,7 +111,7 @@ func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, n
 		return e
 	}
 
-	ioutil.WriteFile(storageFilePath, bf.Bytes(), 0600)
+	ioutil.WriteFile(storageFilePath, bf.Bytes(), filePermission)
 	return nil
 }
 
@@ -129,6 +137,8 @@ func (im *DirImgStorage) SavePngToJpeg(file multipart.File, originFileExtension,
 		return nil, err
 	}
 
+	createDirectoryIfNeed(directory)
+
 	storageFilePath := filepath.Join(directory, newFileName+".jpg")
 	out, err := os.Create(storageFilePath)
 	if err != nil {
@@ -149,4 +159,20 @@ func (im *DirImgStorage) SavePngToJpeg(file multipart.File, originFileExtension,
 
 func printError(message string, e error) {
 	fmt.Println("in image-storage ", message, " error occurred", e)
+}
+
+func existFile(path string) bool {
+	_, e := os.Stat(path)
+	if e != nil {
+		return false
+	}
+	return true
+}
+
+func createDirectoryIfNeed(path string) {
+	//ディレクトが無ければ作る
+	if !existFile(path) {
+		const dirPermission = 0700
+		os.MkdirAll(path, dirPermission)
+	}
 }

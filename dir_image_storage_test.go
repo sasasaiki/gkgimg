@@ -1,7 +1,6 @@
 package imageStorage
 
 import (
-	"fmt"
 	"mime/multipart"
 	"os"
 	"path/filepath"
@@ -31,15 +30,6 @@ func closedFile(path string) multipart.File {
 	file, _ := os.Open(path)
 	file.Close()
 	return file
-}
-
-func existFile(path string) bool {
-	_, e := os.Stat(path)
-	if e != nil {
-		fmt.Println("=========== error!!", path+" が存在しません！！============")
-		return false
-	}
-	return true
 }
 
 func TestPrintError(t *testing.T) {
