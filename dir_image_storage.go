@@ -17,8 +17,9 @@ import (
 
 //ImgStorageI イメージ保管に必要なメソッドを持つ
 type ImgStorageI interface {
-	SaveWithFileHeader(multipart.File, *multipart.FileHeader, string, string) error
-	SaveWithOriginFileName(multipart.File, string, string, string) error
+	SaveAsItIs(multipart.File, string, string, string) error
+	SaveResizedImage(multipart.File, string, string, string, uint, uint, int) error
+	SavePngToJpeg(multipart.File, string, string, string, int) (*os.File, error)
 }
 
 //DirImgStorage ディレクトリに保存する
