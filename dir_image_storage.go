@@ -146,17 +146,6 @@ func SavePngToJpeg(file multipart.File, originFileExtension string, newFileName 
 	return out, nil
 }
 
-func (im *DirImgStorage) Update() {
-}
-
-func (im *DirImgStorage) Delete() {
-
-}
-
-func (im *DirImgStorage) Get() {
-
-}
-
 func printError(message string, e error) {
 	fmt.Println("in image-storage ", message, " error occurred", e)
 }
