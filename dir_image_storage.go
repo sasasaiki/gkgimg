@@ -88,10 +88,10 @@ func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, n
 	switch format {
 	case "jpeg", "jpg":
 		e = jpeg.Encode(bf, resizeFile, &jpeg.Options{
-			Quality: jpgQ, //100にするとなぜか容量がもとより大きくなる
+			Quality: jpgQ, //100にするとなぜか容量がもとの同じサイズより大きくなる
 		})
 	case "png":
-		e = png.Encode(bf, resizeFile)
+		e = png.Encode(bf, resizeFile) //なぜか容量がもとの同じサイズより大きくなる
 	default:
 		printError("jpg(jpeg)とpngにしか対応していないのでEncodeしませんでした", e)
 		return errors.New("jpg(jpeg)とpngにしか対応していません")
