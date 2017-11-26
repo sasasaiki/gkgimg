@@ -1,6 +1,7 @@
 package imageStorage
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"image"
@@ -10,6 +11,8 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+
+	"github.com/nfnt/resize"
 )
 
 //ImgStorageI イメージ保管に必要なメソッドを持つ
@@ -22,6 +25,7 @@ type ImgStorageI interface {
 type DirImgStorage struct {
 }
 
+//このメソッドいらない気がする！！
 //SaveWithFileHeader 拡張子を指定せず、渡したファイルの拡張子を使用して保存する
 func (im *DirImgStorage) SaveWithFileHeader(file multipart.File, fileHeader *multipart.FileHeader, newFileName string, directory string) error {
 
@@ -60,6 +64,58 @@ func (im *DirImgStorage) SaveAsItIs(file multipart.File, originFileName string, 
 		return e
 	}
 
+	return nil
+}
+
+//SaveResizedImage 新しく保存するファイル名には拡張子を指定せず、渡したファイルから拡張子を取得して保存する
+//jpgQはjpegでのみ使用されるクオリティの値。100だとなぜかオリジナルファイルより大きくなるので90以下がオススメ
+// example:
+// originFileName = hoge.png
+// newFileName = fuga
+// jpgQ=90
+func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, newFileName, directory string, w, h uint, jpgQ int) error {
+	defer file.Close()
+
+	data, e := ioutil.ReadAll(file)
+	if e != nil {
+		printError("ReadALL(file)に失敗", e)
+		return e
+	}
+
+	i, format, e := image.Decode(bytes.NewReader(data))
+	if e != nil {
+		printError("Decodeに失敗しました。imageのformatを確認してください", e)
+		return e
+	}
+
+	var storageFilePath string
+	if newFileName == "" {
+		storageFilePath = filepath.Join(directory, originFileName)
+	} else {
+		storageFilePath = filepath.Join(directory, newFileName+"."+format)
+	}
+
+	resizeFile := resize.Resize(w, h, i, resize.Lanczos3)
+	bf := new(bytes.Buffer)
+
+	switch format {
+	case "jpeg", "jpg":
+		e = jpeg.Encode(bf, resizeFile, &jpeg.Options{
+			Quality: jpgQ, //100にするとなぜか容量がもとより大きくなる
+		})
+	case "png":
+		e = png.Encode(bf, resizeFile)
+	default:
+		printError("jpg(jpeg)とpngにしか対応していないのでEncodeしませんでした", e)
+		return errors.New("jpg(jpeg)とpngにしか対応していません")
+	}
+
+	if e != nil {
+		printError("Encodeに失敗しました", e)
+		return e
+	}
+
+	ioutil.WriteFile(storageFilePath, bf.Bytes(), 0600)
 	return nil
 }
 
