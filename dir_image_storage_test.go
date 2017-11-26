@@ -237,11 +237,100 @@ func TestDirImgStorageSaveResizedImage(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		im      *DirImgStorage
 		args    args
 		wantErr bool
 	}{
-	// TODO: Add test cases.
+		{
+			name: "jpegをクオリティ90,サイズそのままで保存できる",
+			args: args{
+				file:           openFile(JpegPath),
+				originFileName: JpegFile,
+				newFileName:    "w0h0q90Jpeg",
+				directory:      TestResultDir,
+				w:              0,
+				h:              0,
+				jpgQ:           90,
+			},
+			wantErr: false,
+		},
+		{
+			name: "pngをクオリティ90,サイズそのままで保存できる(クオリティは関係ない)",
+			args: args{
+				file:           openFile(PngPath),
+				originFileName: PngFile,
+				newFileName:    "w0h0q90png",
+				directory:      TestResultDir,
+				w:              0,
+				h:              0,
+				jpgQ:           90,
+			},
+			wantErr: false,
+		},
+		{
+			name: "jpegをクオリティ90,wを500で保存できる",
+			args: args{
+				file:           openFile(JpegPath),
+				originFileName: JpegFile,
+				newFileName:    "w500h0q90Jpeg",
+				directory:      TestResultDir,
+				w:              500,
+				h:              0,
+				jpgQ:           90,
+			},
+			wantErr: false,
+		},
+		{
+			name: "jpegをクオリティ90,hを500で保存できる",
+			args: args{
+				file:           openFile(JpegPath),
+				originFileName: JpegFile,
+				newFileName:    "w0h500q90Jpeg",
+				directory:      TestResultDir,
+				w:              0,
+				h:              500,
+				jpgQ:           90,
+			},
+			wantErr: false,
+		},
+		{
+			name: "jpegをクオリティ10,w,hを0で保存できる",
+			args: args{
+				file:           openFile(JpegPath),
+				originFileName: JpegFile,
+				newFileName:    "w0h0q0Jpeg",
+				directory:      TestResultDir,
+				w:              0,
+				h:              0,
+				jpgQ:           10,
+			},
+			wantErr: false,
+		},
+		{
+			name: "pngをクオリティ90,wを500で保存できる",
+			args: args{
+				file:           openFile(PngPath),
+				originFileName: PngFile,
+				newFileName:    "w500h0q90png",
+				directory:      TestResultDir,
+				w:              500,
+				h:              0,
+				jpgQ:           90,
+			},
+			wantErr: false,
+		},
+		{
+			name: "textを保存できない",
+			args: args{
+				file:           openFile(TextPath),
+				originFileName: TextFile,
+				newFileName:    "w500h0q90text",
+				directory:      TestResultDir,
+				w:              500,
+				h:              0,
+				jpgQ:           90,
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
