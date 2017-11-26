@@ -25,19 +25,6 @@ type ImgStorageI interface {
 type DirImgStorage struct {
 }
 
-//このメソッドいらない気がする！！
-//SaveWithFileHeader 拡張子を指定せず、渡したファイルの拡張子を使用して保存する
-func (im *DirImgStorage) SaveWithFileHeader(file multipart.File, fileHeader *multipart.FileHeader, newFileName string, directory string) error {
-
-	e := im.SaveAsItIs(file, fileHeader.Filename, newFileName, directory)
-	if e != nil {
-		printError("AddWithAutoExtension()", e)
-		return e
-	}
-
-	return nil
-}
-
 //SaveAsItIs 新しく保存するファイル名には拡張子を指定せず、渡したファイルの拡張子を使用して保存する
 //そのまま何もせず保存しているだけなので多分何でも保存できる
 // example:
