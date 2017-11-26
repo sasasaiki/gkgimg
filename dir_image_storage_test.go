@@ -60,7 +60,7 @@ func TestPrintError(t *testing.T) {
 	}
 }
 
-func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
+func TestDirImgStorageSaveAsItIs(t *testing.T) {
 
 	type args struct {
 		file           multipart.File
