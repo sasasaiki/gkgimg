@@ -108,7 +108,7 @@ func (im *DirImgStorage) SaveResizedImage(file multipart.File, originFileName, n
 
 // SavePngToJpeg jpegに変換して保存
 // TODO:透明部分が黒くなってしまうので一旦置いとく
-func SavePngToJpeg(file multipart.File, originFileExtension string, newFileName string, directory string, quality int) (*os.File, error) {
+func (im *DirImgStorage) SavePngToJpeg(file multipart.File, originFileExtension string, newFileName string, directory string, quality int) (*os.File, error) {
 	var img image.Image
 	var err error
 	switch originFileExtension {

@@ -211,9 +211,10 @@ func TestSavePngToJpeg(t *testing.T) {
 			wantErr: true,
 		},
 	}
+	im := new(DirImgStorage)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := SavePngToJpeg(tt.args.file, tt.args.originExtension, tt.args.newFileName, tt.args.dir, tt.args.quality)
+			_, err := im.SavePngToJpeg(tt.args.file, tt.args.originExtension, tt.args.newFileName, tt.args.dir, tt.args.quality)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("SaveToJpeg() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -253,6 +254,7 @@ func TestDirImgStorageSaveResizedImage(t *testing.T) {
 			},
 			wantErr: false,
 		},
+
 		{
 			name: "pngをクオリティ90,サイズそのままで保存できる(クオリティは関係ない)",
 			args: args{
