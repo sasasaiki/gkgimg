@@ -43,3 +43,12 @@ It corresponds to png and jpg.
 Here is a sample project for using on a server, so please refer to it.
 
 https://github.com/sasasaiki/image-storage-server
+
+
+## SaveAsItIs
+渡されたファイルをそのまま保存する
+SaveAsItIs(file multipart.File, originFileName, newFileName, directory string) error
+もあります。
+こっちはリサイズ等の処理を行わないのでimage以外もいけます。
+
+
