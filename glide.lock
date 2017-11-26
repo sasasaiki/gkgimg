@@ -1,6 +1,8 @@
-hash: 5eaab1ccb3f680cdc56494b872b9ea75d0642411fff91bf6a1c497d071fccaea
-updated: 2017-11-25T11:18:22.324293199+09:00
+hash: 14370d32029effe60df90b74916c0f506e5ed641f9165436b96d6bc46858e644
+updated: 2017-11-25T18:17:21.434573427+09:00
 imports:
+- name: github.com/nfnt/resize
+  version: 891127d8d1b52734debe1b3c3d7e747502b6c366
 - name: github.com/pixiv/go-libjpeg
   version: 5d35bb3437bd4f0adaa2289d9f57c969a3975f98
 testImports: []

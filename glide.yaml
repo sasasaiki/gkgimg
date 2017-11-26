@@ -1,4 +1,5 @@
 package: github.com/sasasaiki/image-storage
 import: 
 - package: github.com/pixiv/go-libjpeg
+- package: github.com/nfnt/resize
 
