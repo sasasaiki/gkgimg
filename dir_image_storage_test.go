@@ -268,7 +268,7 @@ func TestDirImgStorageSaveWithOriginFileName(t *testing.T) {
 	im := new(DirImgStorage)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := im.SaveWithOriginFileName(tt.args.file, tt.args.originFilename, tt.args.fileName, tt.args.directory); (err != nil) != tt.wantErr {
+			if err := im.SaveAsItIs(tt.args.file, tt.args.originFilename, tt.args.fileName, tt.args.directory); (err != nil) != tt.wantErr {
 				t.Errorf("imageManager.Add() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
