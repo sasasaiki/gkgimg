@@ -1,4 +1,4 @@
-package imageStorage
+package gkgimg
 
 import (
 	"bytes"
@@ -158,7 +158,7 @@ func (im *DirImgStorage) SavePngToJpeg(file multipart.File, originFileExtension,
 }
 
 func printError(message string, e error) {
-	fmt.Println("in image-storage ", message, " error occurred", e)
+	fmt.Println("in gkgimg ", message, " error occurred", e)
 }
 
 func existFile(path string) bool {

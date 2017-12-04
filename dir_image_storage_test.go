@@ -1,4 +1,4 @@
-package imageStorage
+package gkgimg
 
 import (
 	"mime/multipart"

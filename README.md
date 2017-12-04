@@ -1,4 +1,4 @@
-# image-storage
+# gkgimg
 画像をリサイズして保存する機能を持ったパッケージ
 
 This package resize and store image file
@@ -7,10 +7,10 @@ This package resize and store image file
 
 1.install
 ```
-go get github.com/sasasaiki/image-storage
+go get github.com/sasasaiki/gkgimg
 
 #If you use glide
-#glide get github.com/sasasaiki/image-storage
+#glide get github.com/sasasaiki/gkgimg
 
 ```
 
@@ -18,14 +18,14 @@ go get github.com/sasasaiki/image-storage
 
 example
 ```
-import "github.com/sasasaiki/image-storage"
+import "github.com/sasasaiki/gkgimg"
 
 func main(){
 
 	const originalFile = "originalFile.jpg"
 	file, _ := os.Open("originalDir/"+originalFile)
 
-	im := imageStorage.DirImgStorage{}
+	im := gkgimg.DirImgStorage{}
 	e := im.SaveResizedImage(file, originalFile, "newFileName", "storeDir", 400, 0, 90)
 	if e != nil {
 		fmt.Println("error")
